@@ -46,7 +46,9 @@ private fun WaterLevel(station: StationWrapper) {
     Column {
         StationDescription(station = station)
         WaterLevelChart(
-            modifier = Modifier.padding(8.dp).fillMaxSize(),
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxSize(),
             waterStateRecords = station.waterStateRecords.reversed()
         )
     }
@@ -57,6 +59,10 @@ private fun WaterLevelChart(
     modifier: Modifier = Modifier,
     waterStateRecords: List<WaterStateRecord>
 ) {
+    if (waterStateRecords.isEmpty()) {
+        Text(text = "No data")
+        return
+    }
     Canvas(modifier = modifier, onDraw = {
         val leftOffset = 50.dp.toPx()
         val itemsToSkip = 1
@@ -164,5 +170,9 @@ fun ChartPreview() {
         WaterStateRecord("", 35, ""),
         WaterStateRecord("", 34, "")
     )
-    WaterLevelChart(Modifier.padding(8.dp).width(300.dp).height(200.dp), data)
+    WaterLevelChart(
+        Modifier
+            .padding(8.dp)
+            .width(300.dp)
+            .height(200.dp), data)
 }

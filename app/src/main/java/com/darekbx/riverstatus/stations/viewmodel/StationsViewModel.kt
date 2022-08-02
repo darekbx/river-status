@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import com.darekbx.riverstatus.model.StationsWrapper
+import com.darekbx.riverstatus.model.Station
 import com.darekbx.riverstatus.repository.BaseRiverStatusRepository
 import com.darekbx.riverstatus.waterlevel.UIEvent
 import com.darekbx.riverstatus.waterlevel.UIState
@@ -36,10 +36,13 @@ class StationsViewModel @Inject constructor(
         }
     }
 
-    fun listStations(): LiveData<StationsWrapper> =
+    fun listStations(): LiveData<List<Station>> =
         liveData(context = viewModelScope.coroutineContext) {
             try {
-                val data = riverStatusRepository.listStations()
+                val data = riverStatusRepository
+                    .listStations()
+                    .byStations
+                    .sortedBy { it.name }
                 emit(data)
             } catch (e: Exception) {
                 onEvent(UIEvent.Error(e.message ?: "Unknown error"))
