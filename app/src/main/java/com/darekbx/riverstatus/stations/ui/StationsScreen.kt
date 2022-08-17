@@ -36,7 +36,6 @@ fun StationsScreen(
             ?.let {
                 var stations by remember { mutableStateOf(it) }
                 Column {
-                    Text("StationsScreen")
                     Button(modifier = Modifier.padding(8.dp), onClick = { openStationClick(152210170) }) {
                         Text("Open WARSZAWA-BULWARY")
                     }

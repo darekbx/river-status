@@ -1,4 +1,4 @@
-package com.darekbx.riverstatus.repository
+package com.darekbx.riverstatus.repository.remote
 
 import com.darekbx.riverstatus.model.StationWrapper
 import com.darekbx.riverstatus.model.StationsWrapper

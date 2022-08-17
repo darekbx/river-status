@@ -2,7 +2,7 @@ package com.darekbx.riverstatus.waterlevel.viewmodel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.darekbx.riverstatus.getOrAwaitValue
-import com.darekbx.riverstatus.repository.ImgwRepository
+import com.darekbx.riverstatus.repository.remote.ImgwRepository
 import com.google.gson.Gson
 import io.ktor.client.*
 import io.ktor.client.engine.mock.*

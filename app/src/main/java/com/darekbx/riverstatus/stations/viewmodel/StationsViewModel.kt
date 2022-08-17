@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.darekbx.riverstatus.model.Station
-import com.darekbx.riverstatus.repository.BaseRiverStatusRepository
+import com.darekbx.riverstatus.repository.remote.BaseRiverStatusRepository
 import com.darekbx.riverstatus.waterlevel.UIEvent
 import com.darekbx.riverstatus.waterlevel.UIState
 import dagger.hilt.android.lifecycle.HiltViewModel

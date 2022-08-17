@@ -4,9 +4,7 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -23,6 +21,8 @@ import com.darekbx.riverstatus.commonui.Progress
 import com.darekbx.riverstatus.model.StationWrapper
 import com.darekbx.riverstatus.model.WaterStateRecord
 import com.darekbx.riverstatus.waterlevel.viewmodel.WaterLevelViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Composable
 fun WaterlevelScreen(
@@ -34,8 +34,15 @@ fun WaterlevelScreen(
     if (state.hasError) {
         ErrorBox(state.errorMessage!!)
     } else {
-        val stationWrapper by waterLevelViewModel.getStationInfo(stationId).observeAsState()
-        stationWrapper
+        var stationInfo by remember { mutableStateOf<StationWrapper?>(null) }
+
+        LaunchedEffect(true) {
+            withContext(Dispatchers.IO) {
+                stationInfo = waterLevelViewModel.getStationInfo(stationId)
+            }
+        }
+
+        stationInfo
             ?.let { WaterLevel(it) }
             ?: run { Progress() }
     }
