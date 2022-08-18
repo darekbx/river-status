@@ -73,8 +73,8 @@ internal class StationsViewModelTest {
         val result = viewModel.listStations().getOrAwaitValue()
 
         // Then
-        assertEquals(2, result.byStations.size)
-        with (result.byStations[0]) {
+        assertEquals(2, result.size)
+        with (result[1]) {
             assertEquals(250230070, id)
             assertEquals(23.3989, longitude, 0.01)
             assertEquals("TOMASZÓW LUBELSKI", name)
