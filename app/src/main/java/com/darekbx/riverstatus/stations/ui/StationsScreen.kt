@@ -31,24 +31,24 @@ fun StationsScreen(
     if (state.hasError) {
         ErrorBox(state.errorMessage!!)
     } else {
+        val filterState = remember { mutableStateOf("") }
         val stations by stationsViewModel.listStations().observeAsState()
-        stations
-            ?.let {
-                var stations by remember { mutableStateOf(it) }
-                Column {
-                    Button(modifier = Modifier.padding(8.dp), onClick = { openStationClick(152210170) }) {
-                        Text("Open WARSZAWA-BULWARY")
-                    }
+        stations?.let {
+            Column {
+                Button(
+                    modifier = Modifier.padding(8.dp),
+                    onClick = { openStationClick(152210170) }) {
+                    Text("Open WARSZAWA-BULWARY")
+                }
 
-                    FilterBox(Modifier.fillMaxWidth()) { query ->
-                        stations = stations.filter { it.name.lowercase().contains(query) }
-                    }
-                    StationsList(stations = stations) {
-                        openStationClick(it.id)
-                    }
+                FilterBox(Modifier.fillMaxWidth()) { query ->
+                    filterState.value = query
+                }
+                StationsList(stations = it, filter = filterState) {
+                    openStationClick(it.id)
                 }
             }
-            ?: run { Progress() }
+        } ?: run { Progress() }
     }
 }
 
@@ -74,10 +74,12 @@ private fun FilterBox(
 private fun StationsList(
     modifier: Modifier = Modifier,
     stations: List<Station>,
+    filter: MutableState<String>,
     onClick: (Station) -> Unit
 ) {
+    val stationsFiltered = stations.filter { it.name.lowercase().contains(filter.value) }
     LazyColumn(modifier) {
-        items(stations) { station ->
+        items(stationsFiltered) { station ->
             StationItem(
                 modifier = Modifier
                     .padding(top = 8.dp, start = 18.dp, end = 8.dp)

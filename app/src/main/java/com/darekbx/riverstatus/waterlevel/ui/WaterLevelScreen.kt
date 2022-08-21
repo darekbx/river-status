@@ -154,6 +154,7 @@ fun StationDescription(modifier: Modifier = Modifier, station: StationWrapper) {
     Column(modifier = modifier.padding(8.dp)) {
         Text(text = station.name, style = MaterialTheme.typography.h5)
         Text(text = station.state, color = Color.DarkGray, style = MaterialTheme.typography.h6)
+        Text(text = "New rows: ${station.newRows}", color = Color.DarkGray, style = MaterialTheme.typography.h6)
     }
 }
 

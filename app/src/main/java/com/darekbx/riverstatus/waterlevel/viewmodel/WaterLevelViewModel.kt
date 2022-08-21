@@ -12,7 +12,6 @@ import com.darekbx.riverstatus.repository.remote.BaseRiverStatusRepository
 import com.darekbx.riverstatus.waterlevel.UIEvent
 import com.darekbx.riverstatus.waterlevel.UIState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
@@ -45,9 +44,10 @@ class WaterLevelViewModel @Inject constructor(
         try {
             val data = riverStatusRepository.fetchStationInfo(stationId)
             Log.v(TAG, "Received ${data.waterStateRecords.size} records")
-            addNewEntries(data, stationId)
+            val newRows = addNewEntries(data, stationId)
             val entries = loadEntries()
             return data.copy(waterStateRecords = entries)
+                .apply { this.newRows = newRows }
         } catch (e: Exception) {
             onEvent(UIEvent.Error(e.message ?: "Unknown error"))
             throw e
@@ -61,10 +61,13 @@ class WaterLevelViewModel @Inject constructor(
         return entries
     }
 
+    /**
+     * @return How many rows were addded
+     */
     private fun addNewEntries(
         data: StationWrapper,
         stationId: Long
-    ) {
+    ): Int {
         val lastEntry = waterLevelDao.fetchLast()
         Log.v(TAG, "Last entry from ${lastEntry?.date}")
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
@@ -89,6 +92,8 @@ class WaterLevelViewModel @Inject constructor(
         } else {
             Log.v(TAG, "No new records, skip")
         }
+
+        return records.size
     }
 
     companion object {
