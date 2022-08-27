@@ -24,7 +24,8 @@ import com.darekbx.riverstatus.stations.viewmodel.StationsViewModel
 @Composable
 fun StationsScreen(
     stationsViewModel: StationsViewModel = hiltViewModel(),
-    openStationClick: (stationId: Long) -> Unit
+    openStationClick: (stationId: Long) -> Unit,
+    openIntroClick: () -> Unit
 ) {
     val state by stationsViewModel.state
 
@@ -35,10 +36,17 @@ fun StationsScreen(
         val stations by stationsViewModel.listStations().observeAsState()
         stations?.let {
             Column {
-                Button(
-                    modifier = Modifier.padding(8.dp),
-                    onClick = { openStationClick(152210170) }) {
-                    Text("Open WARSZAWA-BULWARY")
+                Row {
+                    Button(
+                        modifier = Modifier.padding(8.dp),
+                        onClick = { openStationClick(152210170) }) {
+                        Text("Open WARSZAWA-BULWARY")
+                    }
+                    Button(
+                        modifier = Modifier.padding(8.dp),
+                        onClick = { openIntroClick() }) {
+                        Text("Demo button")
+                    }
                 }
 
                 FilterBox(Modifier.fillMaxWidth()) { query ->

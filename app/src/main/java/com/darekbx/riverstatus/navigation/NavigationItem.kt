@@ -5,6 +5,7 @@ sealed class NavigationItem(
 ) {
     object Stations: NavigationItem("stations")
     object WaterLevel: NavigationItem("water_level")
+    object IntroScreen: NavigationItem("intro_screen")
 
     companion object {
         val stationIdArg = "station_id"

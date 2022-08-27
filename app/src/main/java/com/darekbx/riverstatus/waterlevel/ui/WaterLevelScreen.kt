@@ -75,13 +75,13 @@ private fun WaterLevelChart(
         val itemsToSkip = 1
         val circleRadius = 3F
         val circleStroke = 1F
-        val yScale = 1.1F
+        val yScale = 0.9F
 
         val width = size.width - leftOffset
         val chunkWidth = width / (waterStateRecords.size - itemsToSkip)
         val maximum = waterStateRecords.maxOf { it.value }
         val minimum = waterStateRecords.minOf { it.value }
-        val chunkHeightScale = (size.height / maximum) * yScale
+        val chunkHeightScale = (size.height / minimum) * yScale
 
         var previousLevel = waterStateRecords.first().value
         var x = 0F
@@ -91,7 +91,7 @@ private fun WaterLevelChart(
             textSize = 24F
         }
 
-        translate(left = leftOffset, top = (size.height - maximum) / 2F) {
+        translate(left = leftOffset, top = 0f) {
 
             drawIntoCanvas {
                 it.nativeCanvas.drawText(
@@ -169,14 +169,39 @@ fun StationDescriptionPreview() {
 fun ChartPreview() {
     val data = listOf(
         WaterStateRecord("", 34, ""),
+        WaterStateRecord("", 34, ""),
+        WaterStateRecord("", 32, ""),
         WaterStateRecord("", 32, ""),
         WaterStateRecord("", 31, ""),
         WaterStateRecord("", 31, ""),
+        WaterStateRecord("", 31, ""),
+        WaterStateRecord("", 30, ""),
+        WaterStateRecord("", 30, ""),
         WaterStateRecord("", 30, ""),
         WaterStateRecord("", 30, ""),
         WaterStateRecord("", 34, ""),
         WaterStateRecord("", 35, ""),
-        WaterStateRecord("", 34, "")
+        WaterStateRecord("", 35, ""),
+        WaterStateRecord("", 34, ""),
+        WaterStateRecord("", 34, ""),
+        WaterStateRecord("", 34, ""),
+        WaterStateRecord("", 36, ""),
+        WaterStateRecord("", 37, ""),
+        WaterStateRecord("", 37, ""),
+        WaterStateRecord("", 37, ""),
+        WaterStateRecord("", 34, ""),
+        WaterStateRecord("", 32, ""),
+        WaterStateRecord("", 28, ""),
+        WaterStateRecord("", 29, ""),
+        WaterStateRecord("", 34, ""),
+        WaterStateRecord("", 36, ""),
+        WaterStateRecord("", 38, ""),
+        WaterStateRecord("", 40, ""),
+        WaterStateRecord("", 44, ""),
+        WaterStateRecord("", 47, ""),
+        WaterStateRecord("", 50, ""),
+        WaterStateRecord("", 54, ""),
+        WaterStateRecord("", 58, "")
     )
     WaterLevelChart(
         Modifier

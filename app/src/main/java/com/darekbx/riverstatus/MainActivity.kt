@@ -16,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.darekbx.riverstatus.navigation.NavigationItem
 import com.darekbx.riverstatus.commonui.theme.RiverStatusTheme
+import com.darekbx.riverstatus.demo.IntroScreen
 import com.darekbx.riverstatus.stations.ui.StationsScreen
 import com.darekbx.riverstatus.waterlevel.ui.WaterlevelScreen
 import dagger.hilt.android.AndroidEntryPoint
@@ -42,10 +43,18 @@ class MainActivity : ComponentActivity() {
     fun Navigation(navController: NavHostController) {
         NavHost(navController, startDestination = NavigationItem.Stations.route) {
             composable(NavigationItem.Stations.route) {
-                StationsScreen { stationId ->
-                    val route = "${NavigationItem.WaterLevel.route}/$stationId"
-                    navController.navigate(route)
-                }
+                StationsScreen(
+                    openStationClick = { stationId ->
+                        val route = "${NavigationItem.WaterLevel.route}/$stationId"
+                        navController.navigate(route)
+                    },
+                    openIntroClick = {
+                        navController.navigate(NavigationItem.IntroScreen.route)
+                    }
+                )
+            }
+            composable(NavigationItem.IntroScreen.route) {
+                IntroScreen()
             }
             composable(
                 "${NavigationItem.WaterLevel.route}/{${NavigationItem.stationIdArg}}",
