@@ -23,6 +23,8 @@ import com.darekbx.riverstatus.model.WaterStateRecord
 import com.darekbx.riverstatus.waterlevel.viewmodel.WaterLevelViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlin.math.abs
+import kotlin.math.max
 
 @Composable
 fun WaterlevelScreen(
@@ -75,13 +77,17 @@ private fun WaterLevelChart(
         val itemsToSkip = 1
         val circleRadius = 3F
         val circleStroke = 1F
-        val yScale = 0.9F
+        val yScale = 0.5F
 
         val width = size.width - leftOffset
         val chunkWidth = width / (waterStateRecords.size - itemsToSkip)
         val maximum = waterStateRecords.maxOf { it.value }
         val minimum = waterStateRecords.minOf { it.value }
+        val latest = waterStateRecords.last().value
         val chunkHeightScale = (size.height / minimum) * yScale
+        val latestDisplayTrashold = 5
+        val showLatest = abs(latest - maximum) > latestDisplayTrashold ||
+                abs(latest - minimum) > latestDisplayTrashold
 
         var previousLevel = waterStateRecords.first().value
         var x = 0F
@@ -106,6 +112,14 @@ private fun WaterLevelChart(
                     (maximum - minimum) * chunkHeightScale + 8F,
                     paint
                 )
+                if (showLatest) {
+                    it.nativeCanvas.drawText(
+                        "${latest}cm",
+                        8F - leftOffset,
+                        (maximum - latest) * chunkHeightScale + 8F,
+                        paint
+                    )
+                }
             }
 
             // Maximum line
@@ -120,6 +134,14 @@ private fun WaterLevelChart(
                 Offset(-leftOffset / 2F, (maximum - minimum) * chunkHeightScale),
                 Offset(size.width, (maximum - minimum) * chunkHeightScale)
             )
+            if (showLatest) {
+                // Latest line
+                drawLine(
+                    Color.Gray,
+                    Offset(-leftOffset / 2F, (maximum - latest) * chunkHeightScale),
+                    Offset(size.width, (maximum - latest) * chunkHeightScale)
+                )
+            }
 
             for (record in waterStateRecords.drop(itemsToSkip)) {
                 val firstPoint = Offset(x, (maximum - previousLevel) * chunkHeightScale)
