@@ -9,7 +9,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Paint
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.nativeCanvas
@@ -24,7 +23,6 @@ import com.darekbx.riverstatus.waterlevel.viewmodel.WaterLevelViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlin.math.abs
-import kotlin.math.max
 
 @Composable
 fun WaterlevelScreen(
@@ -75,8 +73,6 @@ private fun WaterLevelChart(
     Canvas(modifier = modifier, onDraw = {
         val leftOffset = 50.dp.toPx()
         val itemsToSkip = 1
-        val circleRadius = 3F
-        val circleStroke = 1F
         val yScale = 0.5F
 
         val width = size.width - leftOffset
@@ -93,7 +89,7 @@ private fun WaterLevelChart(
         var x = 0F
 
         val paint = Paint().asFrameworkPaint().apply {
-            color = android.graphics.Color.DKGRAY
+            color = android.graphics.Color.LTGRAY
             textSize = 24F
         }
 
@@ -148,21 +144,7 @@ private fun WaterLevelChart(
                 val secondPoint =
                     Offset(x + chunkWidth, (maximum - record.value) * chunkHeightScale)
 
-                drawLine(Color.Red, firstPoint, secondPoint)
-                drawCircle(Color.White, circleRadius, firstPoint)
-                drawCircle(Color.White, circleRadius, secondPoint)
-                drawCircle(
-                    Color.Black,
-                    circleRadius,
-                    firstPoint,
-                    style = Stroke(width = circleStroke)
-                )
-                drawCircle(
-                    Color.Black,
-                    circleRadius,
-                    secondPoint,
-                    style = Stroke(width = circleStroke)
-                )
+                drawLine(Color.White, firstPoint, secondPoint)
 
                 x += chunkWidth
                 previousLevel = record.value
@@ -175,8 +157,8 @@ private fun WaterLevelChart(
 fun StationDescription(modifier: Modifier = Modifier, station: StationWrapper) {
     Column(modifier = modifier.padding(8.dp)) {
         Text(text = station.name, style = MaterialTheme.typography.h5)
-        Text(text = station.state, color = Color.DarkGray, style = MaterialTheme.typography.h6)
-        Text(text = "New rows: ${station.newRows}", color = Color.DarkGray, style = MaterialTheme.typography.h6)
+        Text(text = station.state, color = Color.LightGray, style = MaterialTheme.typography.h6)
+        Text(text = "New rows: ${station.newRows}", color = Color.LightGray, style = MaterialTheme.typography.h6)
     }
 }
 
